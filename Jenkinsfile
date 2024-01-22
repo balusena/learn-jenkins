@@ -23,6 +23,7 @@ pipeline {
             steps {
                 echo 'Hello World'
                 sh 'env'
+                ss 'echo AAP_INPUT - $APP_INPUT'
             }
         }
     }
