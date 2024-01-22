@@ -3,6 +3,7 @@ pipeline {
 
     environment {
       SSH = credentials("SSH")
+    }
 
     stages {
         stage('Hello-1') {
