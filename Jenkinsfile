@@ -23,6 +23,11 @@ pipeline {
     stages {
         stage('Hello-1') {
             steps {
+                input {
+                    message "Should we continue?"
+                    ok "Yes, we should."
+                    }
+                }
                 echo 'Hello World'
                 sh 'env'
                 echo "APP_INPUT - ${params.APP_INPUT}"
@@ -36,5 +41,3 @@ pipeline {
         }
     }
 }
-
-//comment
