@@ -1,17 +1,14 @@
 pipeline {
-    agent {
-        node {
-            label 'workstation'
-        }
-    }
+
+    agent { node { label 'workstation' }}
 
     environment {
-        SSH = credentials("SSH")
-        DEMO_URL = 'google.com'
+       SSH = credentials("SSH")
+       DEMO_URL = 'google.com'
     }
 
     options {
-        ansiColor('xterm')
+      ansiColor('xterm')
     }
 
     triggers { pollSCM('H/2 * * * *') }
@@ -20,24 +17,25 @@ pipeline {
         string(name: 'APP_INPUT', defaultValue: '', description: 'Just Input')
     }
 
-    stages {
+        stages {
         stage('Hello-1') {
-            steps {
-                input {
-                    message "Should we continue?"
-                    ok "Yes, we should."
-                }
-                echo 'Hello World'
-                sh 'env'
-                sh 'echo APP_INPUT - $APP_INPUT'
-            }
+          input {
+            message "Should we continue?"
+            ok "Yes, we should."
+          }
+          steps {
+            echo 'Hello World'
+            sh 'env'
+            sh 'echo APP_INPUT - $APP_INPUT'
+          }
         }
     }
 
+
     post {
-        always {
-            sh 'echo Post'
-        }
-    }
+      always {
+         sh 'echo Post'
+      }
+   }
 }
 
