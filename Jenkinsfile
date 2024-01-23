@@ -22,15 +22,15 @@ pipeline {
 
     stages {
         stage('Hello-1') {
-            steps {
-                input {
-                    message "Should we continue?"
-                    ok "Yes, we should."
-                }
-                echo 'Hello World'
-                sh 'env'
-                echo "APP_INPUT - ${params.APP_INPUT}"
-            }
+          input {
+            message "Should we continue?"
+            ok "Yes, we should."
+          }
+          steps {
+            echo 'Hello World'
+            sh 'env'
+            sh 'echo APP_INPUT - $params.APP_INPUT"
+          }
         }
     }
 
