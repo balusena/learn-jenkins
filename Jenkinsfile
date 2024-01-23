@@ -29,7 +29,7 @@ pipeline {
                 }
                 echo 'Hello World'
                 sh 'env'
-                sh 'echo APP_INPUT - $params.APP_INPUT'
+                sh 'echo APP_INPUT - $APP_INPUT'
             }
         }
     }
