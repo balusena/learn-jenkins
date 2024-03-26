@@ -169,9 +169,9 @@ def getDropdownValues() {
 */
 
 node('workstation') {
+    // Fetching branch names from AWS ECR
     BRANCH_NAMES = sh(script: "aws ecr describe-images --repository-name frontend --query 'imageDetails[*].imageTags' --output text | sort", returnStdout: true).trim()
     print BRANCH_NAMES
-    // BRANCH_NAMES = sh (script: 'git ls-remote -h https://github.com/balusena/learn-jenkins.git | sed \'s/\(.*\)\\/\\(.*\)/\\2/\' | tr -d \'\\n\'', returnStdout:true).trim()
 }
 
 pipeline {
@@ -190,11 +190,15 @@ pipeline {
     stages {
         stage("Run Tests") {
             steps {
-                sh "echo SUCCESS on ${BranchName}"
+                // Accessing the selected branch name
+                script {
+                    echo "SUCCESS on ${params.BranchName}"
+                }
             }
         }
     }
 }
+
 
 
 
