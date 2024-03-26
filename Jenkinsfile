@@ -232,12 +232,15 @@ properties([
                       return x.in.text.tokenize()
                     ''',
                 parameters: [
-                    [name:'COMPONENT', value: '$COMPONENT']
+                    [$class: 'CascadeChoiceParameterContext',
+                     name: 'COMPONENT',
+                     value: '${COMPONENT}']
                 ]
             ]
         ]
     ])
 ])
+
 
 
 
