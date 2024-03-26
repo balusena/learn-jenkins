@@ -202,7 +202,7 @@ pipeline {
 */
 
 
-properties([
+/*properties([
     parameters([
         [
             $class: 'ChoiceParameter',
@@ -240,7 +240,41 @@ properties([
         ]
     ])
 ])
+*/
 
+properties([
+    parameters([
+        [$class: 'ChoiceParameter',
+         choiceType: 'PT_SINGLE_SELECT',
+         name: 'COMPONENT',
+         script: [
+             $class: 'GroovyScript',
+             script: '''
+                return ["Option1", "Option2"]
+             '''
+         ],
+         description: 'Choose a component'
+        ]
+    ])
+])
+
+pipeline {
+    agent any
+
+    stages {
+        stage('Example') {
+            steps {
+                script {
+                    def APP_VERSIONS = sh(
+                        script: "aws ecr describe-images --repository-name catalogue --query 'imageDetails[*].imageTags' --output text | sort",
+                        returnStdout: true
+                    ).trim()
+                    println "APP_VERSIONS: ${APP_VERSIONS}"
+                }
+            }
+        }
+    }
+}
 
 
 
