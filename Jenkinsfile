@@ -168,7 +168,8 @@ def getDropdownValues() {
 }
 */
 
-node('workstation') {
+
+/*node('workstation') {
     // Fetching branch names from AWS ECR
     BRANCH_NAMES = sh(script: "aws ecr describe-images --repository-name frontend --query 'imageDetails[*].imageTags' --output text | sort", returnStdout: true).trim()
     print BRANCH_NAMES
@@ -198,6 +199,45 @@ pipeline {
         }
     }
 }
+*/
+
+
+properties([
+    parameters([
+        [
+            $class: 'ChoiceParameter',
+            choiceType: 'PT_SINGLE_SELECT',
+            name: 'COMPONENT',
+            script: [
+                classpath: [],
+                sandbox: false,
+                script:
+                    '''
+                      def x = "/opt/aws-ecr-for-jenkins-param".execute()
+                      return x.in.text.tokenize()
+                    '''
+            ]
+        ],
+        [
+            $class: 'CascadeChoiceParameter',
+            choiceType: 'PT_SINGLE_SELECT',
+            name: 'Host',
+            referencedParameters: 'Environment',
+            script: [
+                classpath: [],
+                sandbox: false,
+                script:
+                    '''
+                      def x = "/opt/aws-ecr-for-jenkins-param".execute()
+                      return x.in.text.tokenize()
+                    ''',
+                parameters: [
+                    [name:'COMPONENT', value: '$COMPONENT']
+                ]
+            ]
+        ]
+    ])
+])
 
 
 
