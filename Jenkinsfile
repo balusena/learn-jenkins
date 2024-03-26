@@ -101,7 +101,8 @@
 }
 */
 
-properties([
+
+/*properties([
     parameters([
         [
             $class: 'ChoiceParameter',
@@ -139,6 +140,32 @@ pipeline {
     }
   }
 }
+*/
+
+pipeline {
+  agent any
+  parameters {
+    choice(
+        choices: getDropdownValues(),
+        description: 'Select an option from the dropdown',
+        name: 'DYNAMIC_DROPDOWN'
+    )
+  }
+  stages {
+    stage('Example Stage') {
+      steps {
+        echo "Selected option: \${params.DYNAMIC_DROPDOWN}"
+      }
+    }
+  }
+}
+
+// Function to generate dynamic dropdown values
+def getDropdownValues() {
+  // Implement your logic here to generate dropdown values dynamically
+  return ['Option 4', 'Option 2', 'Option 3']
+}
+
 
 
 
