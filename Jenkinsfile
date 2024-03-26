@@ -142,7 +142,8 @@ pipeline {
 }
 */
 
-pipeline {
+
+/*pipeline {
   agent any
   parameters {
     choice(
@@ -165,6 +166,38 @@ def getDropdownValues() {
   // Implement your logic here to generate dropdown values dynamically
   return ['Option 4', 'Option 2', 'Option 3']
 }
+*/
+
+node('workstation') {
+    BRANCH_NAMES = sh(script: "aws ecr describe-images --repository-name frontend --query 'imageDetails[*].imageTags' --output text | sort", returnStdout: true).trim()
+    print BRANCH_NAMES
+    // BRANCH_NAMES = sh (script: 'git ls-remote -h https://github.com/balusena/learn-jenkins.git | sed \'s/\(.*\)\\/\\(.*\)/\\2/\' | tr -d \'\\n\'', returnStdout:true).trim()
+}
+
+pipeline {
+    agent {
+        node {
+            label 'workstation'
+        }
+    }
+    parameters {
+        choice(
+            name: 'BranchName',
+            choices: "${BRANCH_NAMES}",
+            description: 'To refresh the list, go to configure, disable "this build has parameters", launch build (without parameters) to reload the list and stop it, then launch it again (with parameters)'
+        )
+    }
+    stages {
+        stage("Run Tests") {
+            steps {
+                sh "echo SUCCESS on ${BranchName}"
+            }
+        }
+    }
+}
+
+
+
 
 
 
